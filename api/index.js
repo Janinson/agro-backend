@@ -1,11 +1,10 @@
 const express = require("express");
+const routes = require("./routes/routes");
 
 const app = express();
 app.use(express.json());
 
-app.get("/api/v1", (request, response) => {
-    response.send('Hola mundo');
-});
+app.use(routes);
 
 const PORT = 3007;
 app.listen(PORT, () => {
