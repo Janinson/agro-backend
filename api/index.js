@@ -1,10 +1,11 @@
+require("./config");
 const express = require("express");
-const routes = require("./routes/routes");
+const rutas = require("./routes/rutas");
 
 const app = express();
 app.use(express.json());
 
-app.use(routes);
+app.use(rutas);
 
 const PORT = 3007;
 app.listen(PORT, () => {
