@@ -7,8 +7,12 @@ const ventasController = require("../controllers/ventas.controller");
 const pagosController = require("../controllers/pagos.controller");
 const detallesVentasController = require("../controllers/detallesVentas.controller");
 const entidadBancariaController = require("../controllers/entidadBancaria.controller");
+const autenticacion = require("../controllers/autenticacion.controller");
 
 router
+  .post("/api/v1/login", autenticacion.inicioSesion)
+  .get("/api/v1/valid", autenticacion.validarToken)
+
   .get("/api/v1/usuarios", usuariosController.obtenerUsuarios)
   .post("/api/v1/usuarios", usuariosController.guardarUsuario)
   .put("/api/v1/usuarios/:id", usuariosController.actualizarUsuario)
