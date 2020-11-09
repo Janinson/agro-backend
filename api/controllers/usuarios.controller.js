@@ -2,6 +2,7 @@ const ServicePostgres = require("../services/postgres");
 const _servicePg = new ServicePostgres();
 
 const obtenerUsuarios = async (request, response) => {
+  //console.log(request._token);
   const sql = "SELECT * FROM usuarios*"
   let responseDB = await _servicePg.execute(sql);
   let rowCount = responseDB.rowCount;

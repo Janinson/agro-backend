@@ -17,7 +17,7 @@ CREATE TABLE productos (
 	id SERIAL PRIMARY KEY NOT NULL,
 	nombre VARCHAR(100) NOT NULL,
 	descripcion VARCHAR(1000) NULL,
-	precio VARCHAR (1000) NOT NULL,
+	precio INT NOT NULL,
 	categoria VARCHAR(100) NULL,
        id_usuario INT NOT NULL,
        FOREIGN KEY (id_usuario) REFERENCES usuarios(id)

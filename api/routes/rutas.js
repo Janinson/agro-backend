@@ -11,6 +11,7 @@ const autenticacion = require("../controllers/autenticacion.controller");
 
 router
   .post("/api/v1/login", autenticacion.inicioSesion)
+  .use("/", autenticacion.middleware)
   .get("/api/v1/valid", autenticacion.validarToken)
 
   .get("/api/v1/usuarios", usuariosController.obtenerUsuarios)
@@ -42,5 +43,7 @@ router
   .post("/api/v1/entidad", entidadBancariaController.guardarEntidadBancaria)
   .put("/api/v1/entidad/:id", entidadBancariaController.actualizarEntidadBancaria)
   .delete("/api/v1/entidad/:id", entidadBancariaController.eliminarEntidadBancaria)
+
+  .use("/", autenticacion.noEncontrado);
 
 module.exports = router;

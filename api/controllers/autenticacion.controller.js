@@ -36,10 +36,8 @@ const validarToken = (request, response) => {
   let responseJSON = {};
   responseJSON.ok = true;
   try {
-    let headers = request.headers.authorization.split(" ");
-    let token = headers[1];
     responseJSON.message = "Usuarios, esta bien";
-    responseJSON.info = jwt.validarToken(token);
+    responseJSON.info = descifrarToken(request);
     response.send(responseJSON);
   } catch (error) {
     responseJSON.ok = false;
@@ -49,4 +47,39 @@ const validarToken = (request, response) => {
   }
 };
 
-module.exports = { inicioSesion, validarToken };
+/**
+ * 
+ * @param {Request} request 
+ * @param {Response} response 
+ * @param {*} next 
+ */
+const middleware = (request, response, next) => {
+  try {
+    console.log(request.url);
+    let token = descifrarToken(request);
+    request._token = token;
+    next();
+  } catch (error) {
+    let responseJSON = {}
+    responseJSON.ok = false;
+    responseJSON.message = "Error mientras se valida el middleware.";
+    responseJSON.info = error;
+    response.status(400).send(responseJSON);
+  }
+};
+
+const descifrarToken = (request) => {
+  let headers = request.headers.authorization.split(" ");
+  let token = headers[1];
+  return jwt.validarToken(token);
+}
+
+const noEncontrado = (request, response) => {
+  let responseJSON = {};
+  responseJSON.ok = false;
+  responseJSON.message = "Error, endpoint no se encuentra";
+  responseJSON.info = request.url;
+  response.status(404).send(responseJSON);
+};
+
+module.exports = { inicioSesion, validarToken, middleware, noEncontrado};
