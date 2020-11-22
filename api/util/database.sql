@@ -1,3 +1,8 @@
+CREATE TABLE roles(
+    id SERIAL PRIMARY KEY NOT NULL,
+    nombre VARCHAR(30) NOT NULL
+);
+
 -- Tabla usuarios
 CREATE TABLE usuarios(
        id SERIAL PRIMARY KEY NOT NULL,
@@ -8,8 +13,8 @@ CREATE TABLE usuarios(
        pais VARCHAR (50) NOT NULL,
 	ciudad VARCHAR(50) NOT NULL,
        tipo_identificacion VARCHAR(40) NOT NULL,
-       identificacion VARCHAR(40) NOT NULL,
-       tipo_usuario VARCHAR (50) NOT NULL
+       rol int4 NOT NULL,
+       FOREIGN KEY(rol) REFERENCES roles(id)
 );
 
 -- Tabla productos
@@ -20,6 +25,7 @@ CREATE TABLE productos (
 	precio INT NOT NULL,
 	categoria VARCHAR(100) NULL,
        id_usuario INT NOT NULL,
+       imagen VARCHAR(30) NULL,
        FOREIGN KEY (id_usuario) REFERENCES usuarios(id)
 );
 
@@ -48,7 +54,7 @@ CREATE TABLE entidadBancaria(
        entidad VARCHAR(100)
 );
 
--- Tabla rol
+-- Tabla pagos
 CREATE TABLE pagos(
        id SERIAL PRIMARY KEY NOT NULL,
        id_entidad_bancaria INTEGER NOT NULL,

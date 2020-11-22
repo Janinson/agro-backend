@@ -7,12 +7,13 @@ const ventasController = require("../controllers/ventas.controller");
 const pagosController = require("../controllers/pagos.controller");
 const detallesVentasController = require("../controllers/detallesVentas.controller");
 const entidadBancariaController = require("../controllers/entidadBancaria.controller");
+const rolController = require("../controllers/rol.controller");
 const autenticacion = require("../controllers/autenticacion.controller");
 
 router
   .post("/api/v1/login", autenticacion.inicioSesion)
   .use("/", autenticacion.middleware)
-  .get("/api/v1/valid", autenticacion.validarToken)
+  .get("/api/v1/validacion", autenticacion.validarToken)
 
   .get("/api/v1/usuarios", usuariosController.obtenerUsuarios)
   .post("/api/v1/usuarios", usuariosController.guardarUsuario)
@@ -21,6 +22,7 @@ router
 
   .get("/api/v1/productos", productosController.obtenerProductos)
   .post("/api/v1/productos", productosController.guardarProductos)
+  .post("/api/v1/productos/imagen", productosController.guardarImagen)
   .put("/api/v1/productos/:id", productosController.actualizarProductos)
   .delete("/api/v1/productos/:id", productosController.eliminarProductos)
 
@@ -43,6 +45,8 @@ router
   .post("/api/v1/entidad", entidadBancariaController.guardarEntidadBancaria)
   .put("/api/v1/entidad/:id", entidadBancariaController.actualizarEntidadBancaria)
   .delete("/api/v1/entidad/:id", entidadBancariaController.eliminarEntidadBancaria)
+
+  .get("/api/v1/rol", rolController.obtenerRoles)
 
   .use("/", autenticacion.noEncontrado);
 

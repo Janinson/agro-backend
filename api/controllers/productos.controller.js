@@ -27,8 +27,8 @@ const metodos = {
   async guardarProductos(request, response) {
     try {
       let sql =
-      "INSERT INTO public.productos (id, nombre, descripcion, precio, categoria, id_usuario)";
-      sql += "VALUES($1, $2, $3, $4, $5, $6);";
+      "INSERT INTO public.productos (id, nombre, descripcion, precio, categoria, id_usuario, imagen)";
+      sql += "VALUES($1, $2, $3, $4, $5, $6, $7);";
       let body = request.body;
       let values = [
       body.id,
@@ -36,7 +36,8 @@ const metodos = {
       body.descripcion,
       body.precio,
       body.categoria,
-      body.id_usuario
+      body.id_usuario, 
+      body.imagen
       ];
       await _servicePg.execute(sql, values);
       let responseJSON = {};
@@ -49,6 +50,30 @@ const metodos = {
       let responseJSON = {};
       responseJSON.ok = false;
       responseJSON.message = "Error el servidor no pudo interpretar la solicitud.";
+      responseJSON.info = error;
+      response.status(400).send(responseJSON);
+    }
+  },
+
+ /**
+   *
+   * @param {Request} request
+   * @param {*} response
+   */
+  async guardarImagen(request, response) {
+    try {
+      let archivo = request.files.imagen;
+      await archivo.mv("docs/" + archivo.name);
+      let responseJSON = {};
+      responseJSON.ok = true;
+      responseJSON.message = "File uploaded";
+      responseJSON.info = archivo.name;
+      response.send(responseJSON);
+    } catch (error) {
+      console.log(error);
+      let responseJSON = {};
+      responseJSON.ok = false;
+      responseJSON.message = "Error mientras se crea la imagen";
       responseJSON.info = error;
       response.status(400).send(responseJSON);
     }
@@ -79,7 +104,7 @@ const metodos = {
     try {
       let id = request.params.id;
       let sql =
-      "UPDATE public.productos SET nombre=$1, descripcion=$2, precio=$3, categoria=$4, id_usuario=$5 WHERE id=$6;"
+      "UPDATE public.productos SET nombre=$1, descripcion=$2, precio=$3, categoria=$4, id_usuario=$5, imagen=$6 WHERE id=$7;"
       let body = request.body;
       let values = [
         body.nombre,

@@ -23,8 +23,8 @@ const obtenerUsuarios = async (request, response) => {
 
 const guardarUsuario = async (request, response) => {
   try {
-    let sql = "INSERT INTO public.usuarios (id, nombre, clave, correo, edad, pais, ciudad, tipo_identificacion, identificacion, tipo_usuario)";
-    sql += "VALUES($1, $2, md5($3), $4, $5, $6, $7, $8, $9, $10);";
+    let sql = "INSERT INTO public.usuarios (id, nombre, clave, correo, edad, pais, ciudad, tipo_identificacion, rol)";
+    sql += "VALUES($1, $2, md5($3), $4, $5, $6, $7, $8, $9);";
     let body = request.body;
     let values = [
       body.id,
@@ -35,8 +35,7 @@ const guardarUsuario = async (request, response) => {
       body.pais,
       body.ciudad,
       body.tipo_identificacion,
-      body.identificacion,
-      body.tipo_usuario
+      body.rol
     ];
     let responseDB = await _servicePg.execute(sql, values);
     let rowCount = responseDB.rowCount;
@@ -60,7 +59,7 @@ const actualizarUsuario = async (request, response) => {
   try {
     let id = request.params.id;
     let sql =
-      "UPDATE public.usuarios SET nombre=$1, correo=$2, edad=$3, pais=$4, ciudad=$5, tipo_identificacion=$6, identificacion=$7, tipo_usuario=$8 WHERE id=$9;"
+      "UPDATE public.usuarios SET nombre=$1, correo=$2, edad=$3, pais=$4, ciudad=$5, tipo_identificacion=$6, rol=$7 WHERE id=$8;"
     let body = request.body;
     let values = [
       body.nombre,
@@ -69,8 +68,7 @@ const actualizarUsuario = async (request, response) => {
       body.pais,
       body.ciudad,
       body.tipo_identificacion,
-      body.identificacion,
-      body.tipo_usuario,
+      body.rol,
       id
     ];
     await _servicePg.execute(sql, values);

@@ -8,7 +8,7 @@ const inicioSesion = async (request, response) => {
   responseJSON.ok = true;
   try {
     const sql =
-    "SELECT nombre, correo, tipo_usuario FROM usuarios where id = $1 and clave = md5($2)";
+    "SELECT nombre, correo, rol FROM usuarios where id = $1 and clave = md5($2)";
     let body = request.body;
     let values = [body.id, body.clave];
     let responseDB = await _servicePg.execute(sql, values);
@@ -16,12 +16,13 @@ const inicioSesion = async (request, response) => {
     if (rowCount == 1) {
       let user = responseDB.rows[0];
       responseJSON.message = "Usuario esta funcionando";
-      responseJSON.info = jwt.crearToken(user);
+      responseJSON.info = { token: jwt.crearToken(user), rol: user.rol };
       response.send(responseJSON);
     } else {
+      responseJSON.ok = false;
       responseJSON.message = "El usuario no ha sido encontrado (Verifique id, clave)";
       responseJSON.info = [];
-      response.send(responseJSON);
+      response.status(404).send(responseJSON);
     }
   } catch (error) {
     console.log(error);
