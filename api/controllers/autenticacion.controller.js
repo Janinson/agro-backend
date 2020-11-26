@@ -8,9 +8,9 @@ const inicioSesion = async (request, response) => {
   responseJSON.ok = true;
   try {
     const sql =
-    "SELECT nombre, correo, rol FROM usuarios where id = $1 and clave = md5($2)";
+    "SELECT nombre, rol FROM usuarios where correo = $1 and clave = md5($2)";
     let body = request.body;
-    let values = [body.id, body.clave];
+    let values = [body.correo, body.clave];
     let responseDB = await _servicePg.execute(sql, values);
     let rowCount = responseDB.rowCount;
     if (rowCount == 1) {
@@ -20,7 +20,7 @@ const inicioSesion = async (request, response) => {
       response.send(responseJSON);
     } else {
       responseJSON.ok = false;
-      responseJSON.message = "El usuario no ha sido encontrado (Verifique id, clave)";
+      responseJSON.message = "El usuario no ha sido encontrado (Verifique correo, clave)";
       responseJSON.info = [];
       response.status(404).send(responseJSON);
     }
